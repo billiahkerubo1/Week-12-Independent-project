@@ -1,0 +1,346 @@
+---
+title: "Week 12 Indpendent Project"
+author: "Billiah"
+date: '2022-03-18'
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+```{r}
+##The project is on data analysis. A Kenyan entrepreneur has collected data through ads so she can know the audience likely to click on her ads. As a data scientist, I need to understand the data before making the final decision. The first process is to understand the data. I will get the summaries, clean the data and then finally explore the data theough univariate, bivariate and multivariate analysis.
+
+## Once one gets to click the ads by the entrepreneur, they can get an overview of the online course being advertised, increasing their chances of taking the course. The more people click on the ad, the more people sign up for the class.
+
+
+## The metricof success is a high number of people clicking on the ad. A person will click on the ad if they understand the context first.To understand the context, the variables in the data have to be explained well and how they will influence the final goal. This is because if someone can get to understand the data better, then the decision making process is easier. This will be achieved through correlation, data visualization and more exploratory data analysis so as to know what factors to pay more attention to in efforts to get more clients.
+```
+
+
+```{r}
+data <- read.csv("http://bit.ly/IPAdvertisingData")
+```
+
+
+```{r}
+## Getting the number of rows
+```
+
+
+```{r}
+nrow(data)
+```
+```{r}
+## Getting the number of columns
+ncol(data)
+```
+The dataset has 10 columns
+
+```{r}
+head(data)
+```
+
+
+```{r}
+summary(data)
+```
+```{r}
+# Changing the data type of the male column into factor
+data$Male <- as.factor(data$Male)
+```
+
+
+```{r}
+## Checking if it is a factor
+is.factor(data$Male)
+```
+It has been converted to a factor
+```{r}
+## Converting the clicked on ad variable to factor
+data$Clicked.on.Ad <- as.factor(data$Clicked.on.Ad)
+```
+```{r}
+## Confirming if it has been converted
+is.factor(data$Clicked.on.Ad)
+```
+It has been converted to a factor
+```{r}
+##checking for null values
+is.na(data)
+```
+```{r}
+## Getting the total number of null values
+sum(is.na(data))
+```
+
+
+```{r}
+## Checking for duplicates in the dataset
+duplicated(data)
+sum(duplicated(data))
+```
+There are no duplicates in the dataset
+```{r}
+## Checking for outliers
+## Using boxplots to check for outliers
+boxplot.stats(data$Daily.Time.Spent.on.Site)$out
+boxplot.stats(data$Age)$out
+boxplot.stats(data$Area.Income)$out
+boxplot.stats(data$Daily.Internet.Usage)$out
+
+```
+
+
+
+```{r}
+## Univariate Analysis
+## The first univariate analysis is to get the measures of central tendencies
+## Getting the mean
+# Get Mean of the multiple columns
+ 
+colMeans(data[sapply(data, is.numeric)])
+```
+
+```{r}
+## Getting the median
+median(data$Daily.Time.Spent.on.Site)
+median(data$Age)
+median(data$Area.Income)
+median(data$Daily.Internet.Usage)
+
+```
+
+```{r}
+## Getting the mode
+mode(data$Daily.Time.Spent.on.Site)
+mode(data$Age)
+mode(data$Area.Income)
+mode(data$Daily.Internet.Usage)
+mode(data$Ad.Topic.Line)
+mode(data$City)
+mode(data$Male)
+mode(data$Country)
+mode(data$Timestamp)
+mode(data$Clicked.on.Ad)
+```
+
+
+```{r}
+## Getting the maximum and minimum values of numerical variables
+max(data$Daily.Time.Spent.on.Site)
+max(data$Age)
+max(data$Area.Income)
+max(data$Daily.Internet.Usage)
+```
+
+```{r}
+## Getting the minimum values
+min(data$Daily.Time.Spent.on.Site)
+min(data$Age)
+min(data$Area.Income)
+min(data$Daily.Internet.Usage)
+```
+
+
+```{r}
+## Getting measures of dispersion
+# Getting interquantile range
+IQR(data$Daily.Time.Spent.on.Site)
+IQR(data$Age)
+IQR(data$Area.Income)
+IQR(data$Daily.Internet.Usage)
+```
+
+```{r}
+## Getting standard deviation
+sd(data$Daily.Time.Spent.on.Site)
+sd(data$Age)
+sd(data$Area.Income)
+sd(data$Daily.Internet.Usage)
+
+```
+```{r}
+## Getting summaries using boxplot
+boxplot(data$Age)
+boxplot(data$Daily.Time.Spent.on.Site)
+boxplot(data$Area.Income)
+boxplot(data$Daily.Internet.Usage)
+```
+
+```{r}
+## Showing distribution using histogram
+hist(data$Daily.Time.Spent.on.Site)
+```
+The highest amount of time spent on the site is between 75 and 80.
+```{r}
+hist(data$Age)
+
+```
+The highest number of people on the site are aged between 30 and 35.
+
+```{r}
+hist(data$Area.Income)
+
+```
+
+The highest level of income is between 60000-65000. 
+
+
+```{r}
+hist(data$Daily.Internet.Usage)
+
+```
+
+The highest level of daily internet usage is between 100 and 150, and between 225 and 250.
+
+```{r}
+## Analysing age distribution using density plot
+plot(density(data$Age))
+
+```
+
+The highest number of people are aged between 30 and 40.
+
+```{r}
+##  Bivariate Analysis
+## Bivariate Analysis using scatter plots
+## We will analyze how two factors are related or influence each other
+## Analysing how daily time on site influences clicking on the ad 
+plot(data$Daily.Time.Spent.on.Site, data$Clicked.on.Ad, pch=18, col='purple',
+     main='Daily time spent on site vs. Clicked on ad',
+     xlab='Daily time', ylab='Clicked on ad')
+
+
+```
+The two variables have no linear relationship. The time spent on the site does not influence clicking on the ad.
+
+```{r}
+
+# scatterplot on age vs clicking on ad
+plot(data$Age, data$Clicked.on.Ad, pch=19, col='yellow',
+     main='Age vs. Clicking on ad',
+     xlab='Age', ylab='Clicking on ad')
+```
+Age and clicking on ad have no linear relationship. Age does not influence clicking on an ad.
+
+```{r}
+## Scatterplot on area income vs clicking on site
+plot(data$Area.Income, data$Clicked.on.Ad, pch=15, col='pink',
+     main='Area income vs. clicking on ad',
+     xlab='Area income', ylab='Click on ad')
+```
+The area income has no linear relationship with clicking on an ad. An individual's income does not influence the clicking of an ad.
+
+```{r}
+## Scatterplot on daily internet usage vs clicking on an ad
+plot(data$Daily.Internet.Usage, data$Clicked.on.Ad, pch=16, col='blue',
+     main='Daily internet usage vs. clicked on ad',
+     xlab='Daily internet usage', ylab='Clicked on ad')
+
+```
+The daily internet usage has no linear relationship with clicking on an ad. A person's internet usage does not influence clicking on an ad.
+
+
+
+```{r}
+## The second way of bivariate analysis is through the us of correlation coeffiecients
+# Getting the  correlation between age and area income
+cor(data$Age, data$Area.Income)
+```
+The two variables are weakly negatively correlated. Age does not influence the area income positively.
+
+```{r}
+## Correlation between age and time spent on the site
+
+cor(data$Age, data$Daily.Time.Spent.on.Site)
+
+```
+
+The two variables are weakly negatively correlated. As age increases, the time spent on the site decreases.
+
+```{r}
+#calculate correlation between age and daily internet usage
+cor(data$Daily.Internet.Usage, data$Age)
+
+```
+
+The two variables are inversely and negatively correlated. As age increases, the time spent on the internet decreases.
+
+```{r}
+## Another way of bivariate analysis is the use of the regression model
+#fit simple linear regression model
+fit <- lm(data$Daily.Internet.Usage ~ data$Daily.Time.Spent.on.Site , data=data)
+
+#view summary of model
+summary(fit)
+
+lm(formula = data$Daily.Internet.Usage ~ data$Daily.Time.Spent.on.Site, data = data)
+
+```
+
+For every day spent on the internet, there is 14% chance to spend time on the site.
+
+
+
+
+
+CONCLUSION:
+
+The highest level of income is between 60000-65000
+
+The highest amount of time spent on thee site is between 75 and 80.
+
+The highest level of daily internet usage is between 100 and 150, and between 225 and 250.
+
+The highest number of people are aged between 30 and 40.
+
+The daily time spent on the site does not influence the clicking of the ad.
+
+Age has no influence on whether one clicks on the ad or not.
+
+The area income has no relationship with the clicking of an ad.
+
+The daily internet usage does not influence clicking on an ad.
+
+As age increases, the level of income decreases.
+
+As age increases, the time spent on the site decreases.
+
+As age increases, the time spent on the internet decreases.
+
+
+RECOMMENDATION:
+
+The ad should be targeted on the younger individuals.
+
+The reason is because they are the majority people
+
+Another reason is that they spend more time on the internet
+
+They also spend more time on the site, compared to the older individuals.
+
+Another reason is that they earn mre income an can therefore afford the course.
+
+
